@@ -14,6 +14,19 @@ Snake=[];
  var vertical=v;
 }
 Snake.push(new Position(5,5))
+var directie="west";
+directie.addEventListener(event,function(event)
+{
+    if(event===87||event===38)
+        directie="north";
+    if(event===83||event===40)
+        directie="south";
+    if(event===65||event===37)
+        directie="east";
+    if(event===39||event===68)
+        directie="west";
+})
+
 /* original
 function miscare (directie) {
      var o;
@@ -46,6 +59,7 @@ function miscare (directie) {
         }
 }
 */
+
 function miscare (directie) {
     var o;
     var v;
@@ -90,9 +104,9 @@ function Draw() {
     bodyElem.appendChild(table);
     table.id="GameTable"
     table.style.width="300px";
-    table.style.borderColor="black";
-    table.style.borderWidth='medium'
-    table.style.borderBottom="20px black"
+    //table.style.borderColor="black";
+    //table.style.borderWidth='medium'
+   // table.style.borderBottom="20px black"
 
 
     //table.height="80%";
@@ -131,5 +145,10 @@ Draw();
      if (Gameboard[o][v])
          celula.style.backgroundColor = "yellow";
  }
+
+ setInterval( function() {
+     miscare(directie);
+ },1000);
+
 
 
