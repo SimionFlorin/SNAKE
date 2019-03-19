@@ -1,3 +1,4 @@
+
 var Gameboard=[];
 for(var i=0;i<10;i++)
 {
@@ -7,95 +8,91 @@ for(var i=0;i<10;i++)
         Gameboard[i][j]=0;
     }
 }
+var Score=0;
 Gameboard[5][5]=1;
 Snake=[];
- Position =function(o,v) {
- var orizontal=o;
- var vertical=v;
+class Position {
+    constructor(orizontal,vertical) {
+        this.orizontal = orizontal;
+        this.vertical = vertical;
+    }
 }
-Snake.push(new Position(5,5))
+Snake[0]=new Position(5,5);
 var directie="west";
-directie.addEventListener(event,function(event)
+document.addEventListener("keyup",function(event)
 {
-    if(event===87||event===38)
+    if(event.which===87||event.which===38)
         directie="north";
-    if(event===83||event===40)
+    if(event.which===83||event.which===40)
         directie="south";
-    if(event===65||event===37)
+    if(event.which===65||event.which===37)
         directie="east";
-    if(event===39||event===68)
+    if(event.which===39||event.which===68)
         directie="west";
 })
 
-/* original
-function miscare (directie) {
-     var o;
-     var v;
-	if(directie==='north')
-	    for(i in Snake.length) {
-	        o=Snake.get(i).orizontal;v=Snake.get(i).vertical
-            Gameboard[o][v] = 0;
-	        Redesenare(o,v);
-            Snake.get(i).vertical += 1;
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
-        }
-	if(directie==='south')
-        for(i in Snake.length) {
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 0;
-            Snake.get(i).vertical -= 1;
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
-        }
-    if(directie==='east')
-        for(i in Snake.length) {
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 0;
-            Snake.get(i).orizontal -= 1;
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
-        }
-    if(directie==='west')
-        for(i in Snake.length) {
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 0;
-            Snake.get(i).orizontal += 1;
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
-        }
-}
-*/
 
 function miscare (directie) {
-    var o;
-    var v;
+    var o;var futureO;
+    var v;var futureV;
+    let i=0;
+    console.log(Snake.length)
+        //for(let i=0;i<Snake.length;i++) {
+            o=Snake[i].orizontal;v=Snake[i].vertical;
+            futureO=o;futureV=v;
 
-        for(i in Snake.length) {
-            o=Snake.get(i).orizontal;v=Snake.get(i).vertical;
             if(directie==='north'){
-                    Gameboard[o][v] = 0;
-                    Redesenare(o,v);
-                    Snake.get(i).vertical += 1;
-                    Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
+                    futureV=Snake[i].vertical - 1;
+            }
+            if(directie==='south') {
+                    futureV=Snake[i].vertical + 1;
+                }
+            if(directie==='east') {
+                   futureO= Snake[i].orizontal - 1;
+                }
+            if(directie==='west') {
+                    futureO=Snake[i].orizontal + 1;
+            }
+
+            if(Gameboard[futureO][futureV]===2)
+            {
+                Gameboard[futureO][futureV] = 1;
+                Redesenare(futureO,futureV);
+                Score++;
+                document.getElementById("score").innerText="Score: "+Score;
+                Snake[i].vertical=futureV;
+                Snake[i].orizontal=futureO;
+                Snake[Snake.length]=(new Position(o,v));
+                //orizontal=futureO;
+                //Snake[i+1].vertical=futureV;
+
+                Apple();
 
             }
-            if(directie==='south')
-            {
+            else{
+                if(Snake.length===1){
                     Gameboard[o][v] = 0;
-                    Redesenare[o,v];
-                    Snake.get(i).vertical -= 1;
-                    Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
+                    Redesenare(o,v);
                 }
-            if(directie==='east')
-            {
-                    Gameboard[o][v] = 0;
-                    Redesenare[o][v];
-                    Snake.get(i).orizontal -= 1;
-                    Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
+                Snake[i].orizontal=futureO;
+                Snake[i].vertical=futureV;
+                Gameboard[futureO][futureV] = 1;
+                Redesenare(futureO,futureV);
+                for(i=1;i<Snake.length;i++){
+                    Snake[i].orizontal=Snake[i-1].orizontal;
+                    Snake[i].vertical=Snake[i-1].vertical;
+                    if(i===Snake.length-1)
+                    { Gameboard[Snake[i].orizontal][Snake[i].orizontal]=0;
+                    Redesenare(Snake[i].orizontal,Snake[i].vertical);}
                 }
-            if(directie==='west')
-            {
-                    Gameboard[o][v] = 0;
-                    Redesenare[o][v];
-                    Snake.get(i).orizontal += 1;
-                    Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
-                }
-            Redesenare([Snake.get(i).orizontal],[Snake.get(i).vertical]);
-        }
+            }
+
+}
+function Apple() {
+    let orizontal=parseInt(Math.random()*10);
+    let vertical=parseInt(Math.random()*10);
+    Gameboard[orizontal][vertical]=2;
+    Redesenare(orizontal,vertical);
 }
 
 function Draw() {
@@ -129,8 +126,10 @@ function Draw() {
             celula.id=i*10+j;
         }
     }
+    document.getElementById(55).style.backgroundColor="black";
 
 }
+//
 Draw();
  for(x of Gameboard){
      console.log(x);
@@ -142,13 +141,15 @@ Draw();
          celula.style.backgroundColor = 'white';
      if (Gameboard[o][v] === 1)
          celula.style.backgroundColor = "black";
-     if (Gameboard[o][v])
+     if (Gameboard[o][v] === 2)
          celula.style.backgroundColor = "yellow";
  }
-
- setInterval( function() {
-     miscare(directie);
- },1000);
+function start() {
+    setInterval(function () {
+        miscare(directie);
+    }, 1000);
+}
+Apple();
 
 
 

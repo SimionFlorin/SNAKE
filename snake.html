@@ -1,63 +1,12 @@
-<script>
-var Gameboard = []
-for(var i=0;i<10;i++){
-	for(var j=0;j<10;j++)
-	{
-		Gameboard[i][j]=0;
-	}
-}
-Gameboard[5][5]=1;
-Snake=Array();
-class Position {
- int orizontal;
- int vertical;
-    Position(orizontal,vertical)
-    {
-        this.orizontal=orizontal;
-        this.vertical=vertical;
-    }
-}
-Snake.add(new Position(5,5));
-function miscare (directie) {
-	if(directie==='north')
-	    for(i in Snake.length) {
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 0;
-            Snake.get(i).vertical += 1;
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
-        }
-	if(directie==='south')
-        for(i in Snake.length) {
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 0;
-            Snake.get(i).vertical -= 1;
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
-        }
-    if(directie==='east')
-        for(i in Snake.length) {
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 0;
-            Snake.get(i).orizontal -= 1;
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
-        }
-    if(directie==='west')
-        for(i in Snake.length) {
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 0;
-            Snake.get(i).orizontal += 1;
-            Gameboard[Snake.get(i).orizontal][Snake.get(i).vertical] = 1;
-        }
-}
-function Draw() {
-    var table=document.createElement("table","joc");
-    for(var i=0;i<10;i++)
-    {
-        var randCurent=document.createElement("tr","randul: "+i)
-        table.appendChild(randCurent);
-        for(var j=0;j<10;j++)
-        {
-            var celula=document.createElement("td","celula: "+(i*10+j));
-            randCurent.appendChild(celula);
-        }
-    }
-    var body=document.getElementsByTagName('body');
-    body.appendChild(table);
-}
+<!DOCTYPE html>
+<html>
+<head><title>Snake</title></head>
 
-</script>
+<body id="as">
+<script src="snake.js"></script>
+<div id="div1"></div>
+<style src="snakeCSS.css"></style>
+<button onclick="start()" value="start">Start</button>
+<div id="score" style="font-size: 30px"></div>
+</body>
+</html>
