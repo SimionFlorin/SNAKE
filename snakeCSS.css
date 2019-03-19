@@ -1,6 +1,9 @@
-#GameTable{
-    border-width: thick;
-    border-color: black;
-    border-bottom-width: thick;
-    background-color: aqua;
+.Snake{
+    background-color: black;
+}
+.Fruit{
+    background-color: green;
+}
+.Empty{
+    background-color: grey;
 }

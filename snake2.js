@@ -1,15 +1,5 @@
-
-var Gameboard=[];
-for(var i=0;i<10;i++)
-{
-    Gameboard[i]=[];
-    for(var j=0;j<10;j++)
-    {
-        Gameboard[i][j]=0;
-    }
-}
 var Score=0;
-Gameboard[5][5]=1;
+//Gameboard[5][5]=1;
 Snake=[];
 class Position {
     constructor(orizontal,vertical) {
@@ -55,25 +45,26 @@ function miscare (directie) {
     if(directie==='west') {
         futureO=Snake[0].orizontal + 1;
     }
-        //window.alert(i)
-    if(Gameboard[futureO][futureV]===2) {
-        Gameboard[futureO][futureV] = 1;
-        Redesenare(futureO, futureV);
+    //window.alert(i)
+    let futureElem=document.getElementById(futureO*10+futureV).className;
+    if(futureElem==="Fruit") {
+        document.getElementById((futureO*10+futureV)).className = "Snake";
+        //Redesenare(futureO, futureV);
         Score++;
         document.getElementById("score").innerText = "Score: " + Score;
         Snake[0].vertical = futureV;
         Snake[0].orizontal = futureO;
         let i = 1
         while ( i < Snake.length) {
-
+            Snake[i].prevVertical = Snake[i].vertical;
+            Snake[i].prevOrizontal = Snake[i].orizontal;
             Snake[i].orizontal = Snake[i - 1].prevOrizontal;
             Snake[i].vertical = Snake[i - 1].prevVertical;
-            Snake[i - 1].prevVertical = Snake[i - 1].vertical;
-            Snake[i - 1].prevOrizontal = Snake[i - 1].orizontal;
+
             i++;
         }
 
-        Snake[Snake.length]=(new Position(Snake[i-1].prevOrizontal,Snake[i-1].prevVertical));
+        Snake[Snake.length]=new Position(Snake[i-1].prevOrizontal,Snake[i-1].prevVertical);
         //orizontal=futureO;
         //Snake[i+1].vertical=futureV;
 
@@ -82,19 +73,19 @@ function miscare (directie) {
     }
     else{
         if(Snake.length===1){
-            Gameboard[o][v] = 0;
-            Redesenare(o,v);
+            document.getElementById((o*10+v)).className="Empty"
+            Redesenare()//(o,v);
         }
         Snake[0].orizontal=futureO;
         Snake[0].vertical=futureV;
-        Gameboard[futureO][futureV] = 1;
-        Redesenare(futureO,futureV);
+        document.getElementById(futureO*10+futureV).className="Snake";
+        Redesenare()//(futureO,futureV);
         let i=1;
         while(i<Snake.length){
             //window.alert(i);
             if(i===Snake.length-1)
-            { Gameboard[Snake[i].orizontal][Snake[i].vertical]=0;
-                Redesenare(Snake[i].orizontal,Snake[i].vertical);}
+            { document.getElementById((Snake[i].orizontal*10+Snake[i].vertical)).className="Empty";}
+                Redesenare()//(Snake[i].orizontal,Snake[i].vertical);}
             Snake[i].orizontal=Snake[i-1].prevOrizontal;
             Snake[i].vertical=Snake[i-1].prevVertical;
             Snake[i-1].prevVertical=Snake[i-1].vertical;
@@ -103,13 +94,16 @@ function miscare (directie) {
 
         }
     }
+    Snake[0].prevVertical=Snake[0].vertical;
+    Snake[0].prevOrizontal=Snake[0].orizontal;
 
 }
 function Apple() {
     let orizontal=parseInt(Math.random()*10);
     let vertical=parseInt(Math.random()*10);
-    Gameboard[orizontal][vertical]=2;
-    Redesenare(orizontal,vertical);
+    let coordonate=orizontal*10+vertical;
+    document.getElementById(coordonate).className="Fruit";
+   Redesenare()//(orizontal,vertical);
 }
 
 function Draw() {
@@ -137,29 +131,33 @@ function Draw() {
 
             randCurent.appendChild(celula);
             // celula.innerText="sdf";
-            celula.style.backgroundColor="blue";
-
-
-            celula.id=i*10+j;
+            celula.style.backgroundColor="grey";
+            celula.id=j*10+i;
+            celula.className="Empty"
         }
     }
-    document.getElementById(55).style.backgroundColor="black";
+    let primul=document.getElementById(55)
+    primul.style.backgroundColor="black";
+    primul.className="Snake";
 
 }
 //
 Draw();
-for(x of Gameboard){
-    console.log(x);
-}
 
-function Redesenare(o,v) {
-    let celula = document.getElementById(v * 10 + o);
-    if (Gameboard[o][v] === 0)
-        celula.style.backgroundColor = 'white';
-    if (Gameboard[o][v] === 1)
-        celula.style.backgroundColor = "black";
-    if (Gameboard[o][v] === 2)
-        celula.style.backgroundColor = "yellow";
+
+function Redesenare() {
+    for(let o=0;o<10;o++)
+        for(let v=0;v<10;v++)
+        {
+            let celula = document.getElementById(o * 10 + v);
+            if (document.getElementById((o*10+v)).className === "Empty")
+                celula.style.backgroundColor = 'grey'
+            if (document.getElementById((o*10+v)).className==="Snake")
+                celula.style.backgroundColor = "black";
+            if (document.getElementById((o*10+v)).className==="Fruit")
+                celula.style.backgroundColor = "green";
+        }
+
 }
 function start() {
     setInterval(function () {
